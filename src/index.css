@@ -29,12 +29,33 @@
     height: 100vh;
     pointer-events: none;
     z-index: 9999;
-    display: none; /* Removido conforme solicitado para eliminar o efeito de 'pontos/asteriscos' */
+    display: none; 
+  }
+
+  .section-padding {
+    @apply px-6 py-16 md:px-12 md:py-32 lg:px-24;
+  }
+}
+
+/* Typography Scaling */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+  
+  .font-drama {
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  
+  .font-data {
+    font-size: 11px;
+    letter-spacing: 0.05em;
   }
 }
 
 .magnetic-btn {
-  @apply relative overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)];
+  @apply relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)];
 }
 .magnetic-btn:hover {
   transform: scale(1.03);

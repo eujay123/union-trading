@@ -28,10 +28,10 @@ const ProductSelectorModal = ({ isOpen, onClose, onSelect }) => {
       {/* Modal Content */}
       <div className="relative bg-background w-full max-w-5xl max-h-[90vh] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden border border-dark/10">
         {/* Header */}
-        <div className="p-6 md:p-8 border-b border-dark/5 flex justify-between items-center bg-dark/5">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-1">Selecionar Produto</h2>
-            <p className="text-sm opacity-60 font-mono">Consulte nossa lista completa para identificar o item exato.</p>
+        <div className="p-5 md:p-8 border-b border-dark/5 flex justify-between items-center bg-dark/5">
+          <div className="pr-4">
+            <h2 className="text-xl md:text-3xl font-bold mb-1 leading-tight">Selecionar Produto</h2>
+            <p className="text-[10px] md:text-sm opacity-60 font-mono uppercase tracking-wider">Lista completa de inventário</p>
           </div>
           <button 
             onClick={onClose}
@@ -42,9 +42,9 @@ const ProductSelectorModal = ({ isOpen, onClose, onSelect }) => {
         </div>
 
         {/* Filters Area */}
-        <div className="p-6 md:p-8 bg-background border-b border-dark/5 space-y-6">
+        <div className="p-5 md:p-8 bg-background border-b border-dark/5 space-y-4 md:space-y-6">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={20} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={18} />
             <input 
               type="text"
               placeholder="Pesquise por nome, viscosidade ou modelo..."
@@ -82,13 +82,13 @@ const ProductSelectorModal = ({ isOpen, onClose, onSelect }) => {
                   onClick={() => onSelect(prod.name)}
                   className="group flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-6 rounded-2xl border border-dark/5 hover:border-primary/30 hover:bg-primary/5 transition-all cursor-pointer gap-4"
                 >
-                  <div className="flex items-center gap-4 min-w-0">
-                    <div className="w-12 h-12 bg-dark/5 rounded-xl flex items-center justify-center shrink-0">
-                      {prod.category === 'Lubrificantes' ? <Filter size={20} className="opacity-40" /> : <Table size={20} className="opacity-40" />}
+                  <div className="flex items-center gap-4 min-w-0 w-full md:w-auto">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-dark/5 rounded-xl flex items-center justify-center shrink-0">
+                      {prod.category === 'Lubrificantes' ? <Filter size={18} className="opacity-40" /> : <Table size={18} className="opacity-40" />}
                     </div>
-                    <div className="min-w-0">
-                      <div className="text-xs font-bold uppercase tracking-widest text-primary mb-1">{prod.category}</div>
-                      <div className="font-bold text-sm md:text-lg leading-tight truncate md:whitespace-normal">{prod.name}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[9px] md:text-xs font-bold uppercase tracking-[0.2em] text-primary mb-0.5 md:mb-1">{prod.category}</div>
+                      <div className="font-bold text-sm md:text-lg leading-tight break-words">{prod.name}</div>
                     </div>
                   </div>
                   <button className="whitespace-nowrap bg-dark text-background px-6 py-3 rounded-xl text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
@@ -252,48 +252,48 @@ const Cotacao = ({ setView }) => {
                 </div>
               </div>
 
-              <div className="bg-dark/5 p-8 border border-dark/10 rounded-[2rem]">
-                <h3 className="text-2xl mb-6 font-bold">2. Adicionar Produtos</h3>
-                <form onSubmit={handleAddItem} className="flex flex-col gap-4">
+              <div className="bg-dark/5 p-6 md:p-8 border border-dark/10 rounded-[2rem]">
+                <h3 className="text-xl md:text-2xl mb-6 font-bold">2. Adicionar Produtos</h3>
+                <form onSubmit={handleAddItem} className="flex flex-col gap-5">
                   <div>
-                    <label className="block text-sm opacity-70 mb-2 font-mono">Produto Selecionado</label>
+                    <label className="block text-[10px] md:text-sm opacity-70 mb-2 font-mono uppercase tracking-wider">Produto Selecionado</label>
                     <div className="relative flex gap-2">
                       <div className="relative flex-grow">
                         <input 
                           value={selectedProduct}
-                          onChange={(e) => setSelectedProduct(e.target.value)}
-                          className="w-full bg-background border border-dark/20 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-colors"
-                          placeholder="Digite ou use a tabela →"
+                          readOnly
+                          onClick={() => setIsModalOpen(true)}
+                          className="w-full bg-background border border-dark/20 rounded-xl px-4 py-3.5 focus:outline-none focus:border-primary transition-colors cursor-pointer text-sm"
+                          placeholder="Toque para escolher →"
                         />
                       </div>
                       <button 
                         type="button"
                         onClick={() => setIsModalOpen(true)}
-                        className="bg-primary text-background p-3 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center shrink-0 group"
-                        title="Abrir Tabela de Produtos"
+                        className="bg-primary text-background p-3.5 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center justify-center shrink-0 group"
                       >
-                        <Table size={24} />
+                        <Table size={22} />
                       </button>
                     </div>
                   </div>
                   
                   <div className="flex gap-4 items-end">
                     <div className="w-1/3">
-                      <label className="block text-sm opacity-70 mb-2 font-mono">Qtd</label>
+                      <label className="block text-[10px] md:text-sm opacity-70 mb-2 font-mono uppercase tracking-wider">Qtd</label>
                       <input 
                         type="number" 
                         min="1"
                         value={quantity}
                         onChange={(e) => setQuantity(e.target.value)}
-                        className="w-full bg-background border border-dark/20 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition-colors"
+                        className="w-full bg-background border border-dark/20 rounded-xl px-4 py-3.5 focus:outline-none focus:border-primary transition-colors text-sm"
                         placeholder="0"
                       />
                     </div>
                     <button 
                       type="submit"
-                      className="w-2/3 bg-dark text-background rounded-xl px-2 sm:px-4 py-3 font-bold hover:bg-dark/90 transition-colors flex items-center justify-center gap-1 sm:gap-2 text-sm sm:text-base"
+                      className="w-2/3 bg-dark text-background rounded-xl px-4 py-3.5 font-bold hover:bg-dark/90 transition-colors flex items-center justify-center gap-2 text-sm"
                     >
-                      <Plus size={18} /> <span className="hidden sm:inline">Inserir Item</span><span className="sm:hidden">Inserir</span>
+                      <Plus size={18} /> Inserir Item
                     </button>
                   </div>
                 </form>

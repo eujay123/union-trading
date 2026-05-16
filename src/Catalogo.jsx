@@ -38,12 +38,12 @@ const Catalogo = ({ setView, initialCategory = 'Todos' }) => {
           <ArrowLeft size={16} /> Voltar para o Site
         </button>
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 mb-12 md:mb-16">
           <div>
-            <h1 className="text-4xl md:text-6xl mb-4">
+            <h1 className="text-3xl md:text-6xl mb-4 leading-tight">
               {activeCategory === 'Todos' ? 'Catálogo de Produtos' : `Galeria de ${activeCategory}`}
             </h1>
-            <p className="text-lg opacity-70 max-w-2xl font-mono">
+            <p className="text-base md:text-lg opacity-70 max-w-2xl font-mono leading-relaxed">
               Explore a nossa galeria de produtos importados de alta qualidade.
             </p>
           </div>
@@ -107,15 +107,15 @@ const Catalogo = ({ setView, initialCategory = 'Todos' }) => {
 
             return (
               <div key={category} className="mb-24 last:mb-0">
-                <div className="flex items-center gap-4 mb-10">
-                  <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-widest">{category}</h2>
+                <div className="flex items-center gap-4 mb-8 md:mb-10">
+                  <h2 className="text-lg md:text-3xl font-bold uppercase tracking-[0.2em]">{category}</h2>
                   <div className="h-px bg-dark/10 flex-grow"></div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
                   {categoryProducts.map(product => (
                     <div key={product.id} className="bg-dark/5 border border-dark/10 rounded-[2.5rem] overflow-hidden flex flex-col group hover:border-primary/50 transition-colors hover-lift">
-                      <div className="relative h-64 overflow-hidden bg-background">
+                      <div className="relative h-56 md:h-64 overflow-hidden bg-background">
                         <img 
                           src={product.image} 
                           alt={product.name} 
@@ -123,8 +123,8 @@ const Catalogo = ({ setView, initialCategory = 'Todos' }) => {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-dark/50 to-transparent opacity-50 mix-blend-multiply"></div>
                       </div>
-                      <div className="p-8 flex flex-col flex-grow bg-background">
-                        <h3 className="font-bold text-lg leading-tight mb-4 flex-grow">{product.name}</h3>
+                      <div className="p-6 md:p-8 flex flex-col flex-grow bg-background">
+                        <h3 className="font-bold text-base md:text-lg leading-tight mb-4 flex-grow">{product.name}</h3>
                         <div className="w-12 h-1 bg-primary/20 rounded-full group-hover:w-full transition-all duration-500"></div>
                       </div>
                     </div>
@@ -137,14 +137,14 @@ const Catalogo = ({ setView, initialCategory = 'Todos' }) => {
                     href={`/catalogo-${category.toLowerCase()}.pdf`}
                     target="_blank"
                     rel="noreferrer"
-                    className="bg-dark text-background px-8 py-5 rounded-2xl font-bold hover:scale-[1.02] transition-transform flex items-center gap-4 group"
+                    className="bg-dark text-background px-6 md:px-8 py-4 md:py-5 rounded-2xl font-bold hover:scale-[1.02] transition-transform flex items-center gap-4 group w-full md:w-max"
                   >
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center group-hover:rotate-12 transition-transform">
+                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center group-hover:rotate-12 transition-transform shrink-0">
                       <Plus size={20} />
                     </div>
                     <div className="text-left">
-                      <span className="block opacity-50 text-[10px] uppercase tracking-widest leading-none mb-1">Ficha Técnica Completa</span>
-                      <span className="text-lg leading-none">Baixar Catálogo de {category}</span>
+                      <span className="block opacity-50 text-[9px] md:text-[10px] uppercase tracking-[0.2em] leading-none mb-1">Ficha Técnica Completa</span>
+                      <span className="text-sm md:text-lg leading-none">Baixar Catálogo de {category}</span>
                     </div>
                   </a>
                 </div>

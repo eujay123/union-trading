@@ -26,14 +26,14 @@ const Navbar = ({ setView, setCategory }) => {
   }, []);
 
   return (
-    <nav ref={navRef} className="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full border border-transparent [&.nav-scrolled]:bg-background/50 [&.nav-scrolled]:backdrop-blur-xl [&.nav-scrolled]:border-dark/10 [&.nav-scrolled]:text-dark text-background px-4 md:px-6 py-2 md:py-3 flex justify-between items-center w-[95%] md:w-[90%] max-w-5xl">
+    <nav ref={navRef} className="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full border border-transparent [&.nav-scrolled]:bg-background/80 [&.nav-scrolled]:backdrop-blur-xl [&.nav-scrolled]:border-dark/10 [&.nav-scrolled]:text-dark text-background px-3 md:px-6 py-2 md:py-3 flex justify-between items-center w-[92%] md:w-[90%] max-w-5xl">
       <div 
-        className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
+        className="shrink-0 cursor-pointer hover:opacity-70 transition-opacity pl-2"
         onClick={() => {
           setView('home', null, true);
         }}
       >
-        <img src="/logo.png" alt="UNION Logo" className="nav-logo" />
+        <img src="/logo.png" alt="UNION Logo" className="h-6 md:h-8 w-auto object-contain" />
       </div>
       <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 lg:gap-10 text-sm font-medium whitespace-nowrap">
         <button className="hover-lift" onClick={() => { setView('home'); setTimeout(() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>Produtos</button>
@@ -42,14 +42,13 @@ const Navbar = ({ setView, setCategory }) => {
         <button className="hover-lift" onClick={() => { setView('home'); setTimeout(() => document.getElementById('identidade')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>Identidade</button>
         <button className="hover-lift" onClick={() => { setView('home'); setTimeout(() => document.getElementById('contactos')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>Contactos</button>
       </div>
-      <div className="ml-auto">
+      <div className="flex items-center gap-2">
         <button 
           onClick={() => setView('cotacao')}
-          className="bg-primary text-background px-4 md:px-6 py-2 rounded-full text-xs md:text-sm font-bold magnetic-btn"
+          className="bg-primary text-background px-4 md:px-6 py-2 rounded-full text-[10px] md:text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
         >
-          <div className="magnetic-btn-bg"></div>
-          <span className="magnetic-btn-content flex items-center gap-1 md:gap-2">
-            Pedir Cotação <ArrowRight size={14} />
+          <span className="flex items-center gap-1 md:gap-2 uppercase tracking-wider">
+            Cotação <ArrowRight size={14} className="hidden xs:block" />
           </span>
         </button>
       </div>
@@ -62,9 +61,18 @@ const Hero = () => {
   const videoRef = useRef(null);
 
   useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Force video to stay paused and ready
+    video.pause();
+    video.currentTime = 0;
+
     const ctx = gsap.context(() => {
       // Initial state: video is blurred
-      gsap.set(videoRef.current, { filter: 'blur(15px)' });
+      gsap.set(video, { filter: 'blur(15px)' });
+
+      const isMobile = window.innerWidth < 768;
 
       // Intro text animations
       gsap.from('.hero-text', {
@@ -81,53 +89,64 @@ const Hero = () => {
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=3000', // Keeps the hero pinned for 3000px of scroll
+          end: isMobile ? '+=1800' : '+=3000', // Reduced scroll distance on mobile for better feel
           pin: true,
-          scrub: true,
+          scrub: 1, // Smooth the scrub slightly (1s lag) to avoid stutter on mobile
         }
       });
 
       // 1. Fade out text and blur first
       tl.to('.hero-fade', { opacity: 0, y: -30, duration: 1 }, 0);
-      tl.to(videoRef.current, { filter: 'blur(0px)', duration: 1 }, 0);
+      tl.to(video, { filter: 'blur(0px)', duration: 1 }, 0);
 
-      // 2. Animate video AFTER text disappears
-      const videoProgress = { val: 0 };
-      tl.to(videoProgress, {
-        val: 1,
-        duration: 5, // Takes up the remaining 5 parts of the scroll
+      // 2. Animate video playback based on scroll
+      tl.to(video, {
+        currentTime: video.duration || 5, // Fallback duration if metadata not ready
+        duration: 5,
         ease: 'none',
         onUpdate: () => {
-          if (videoRef.current && videoRef.current.duration && !isNaN(videoRef.current.duration)) {
-            // Precise frame seeking
-            videoRef.current.currentTime = videoRef.current.duration * videoProgress.val;
+          // Double check to ensure we don't exceed duration
+          if (video.duration && video.currentTime > video.duration) {
+            video.currentTime = video.duration;
           }
         }
-      }, 1); 
+      }, 1);
 
     }, containerRef);
-    return () => ctx.revert();
+    
+    // Ensure metadata is loaded before trigger is fully active
+    const handleMetadata = () => {
+      ScrollTrigger.refresh();
+    };
+    video.addEventListener('loadedmetadata', handleMetadata);
+
+    return () => {
+      ctx.revert();
+      video.removeEventListener('loadedmetadata', handleMetadata);
+    };
   }, []);
 
   return (
     <div className="hero-wrapper">
-      <section ref={containerRef} className="relative h-[100dvh] w-full flex items-center justify-center text-center overflow-hidden rounded-b-[3rem] bg-dark">
+      <section ref={containerRef} className="relative h-[100dvh] w-full flex items-end justify-start overflow-hidden rounded-b-[2rem] md:rounded-b-[4rem] bg-dark">
         <div className="absolute inset-0 z-0">
           <video 
             ref={videoRef}
             src="/hero-bg-intra.mp4" 
             muted 
             playsInline
-            className="w-full h-full object-cover scale-[1.05]"
+            preload="auto"
+            className="w-full h-full object-cover scale-[1.05] pointer-events-none"
           ></video>
+          <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent"></div>
         </div>
         
-        <div className="hero-fade relative z-10 w-full max-w-6xl px-6 text-background">
-          <h1 className="hero-text font-drama text-4xl sm:text-5xl md:text-7xl lg:text-[8rem] text-background/90 leading-[1] mb-6 drop-shadow-2xl">
-            Union International Trading
+        <div className="hero-fade relative z-10 w-full max-w-6xl px-8 pb-20 md:pb-32 md:px-24 text-background text-left">
+          <h1 className="hero-text font-drama text-5xl md:text-7xl lg:text-[8rem] text-background/95 leading-[0.9] mb-4 drop-shadow-2xl">
+            Union <br className="md:hidden" /> International <br /> Trading
           </h1>
-          <p className="hero-text text-base sm:text-lg md:text-2xl font-mono opacity-90 drop-shadow-lg tracking-widest lowercase">
-            em cada movimento confie na union
+          <p className="hero-text text-sm md:text-2xl font-mono opacity-80 drop-shadow-lg tracking-[0.2em] uppercase max-w-md">
+            em cada movimento, <br className="md:hidden" /> confie na union
           </p>
         </div>
       </section>
@@ -288,7 +307,7 @@ const Philosophy = () => {
 const ProtocolCard = ({ index, title, desc, children }) => {
   return (
     <div className="w-full">
-      <div className="protocol-card min-h-[60vh] md:min-h-[80vh] bg-background border border-dark/10 rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 shadow-sm flex flex-col md:flex-row items-center gap-8 md:gap-12 sticky top-24 mb-16 md:mb-24">
+      <div className="protocol-card min-h-[50vh] md:min-h-[80vh] bg-background border border-dark/10 rounded-[2rem] md:rounded-[4rem] p-6 md:p-12 shadow-sm flex flex-col md:flex-row items-center gap-8 md:gap-12 sticky top-24 mb-10 md:mb-24">
         <div className="w-full md:w-1/2">
           <div className="font-data text-primary text-xl mb-6">0{index}</div>
           <h2 className="text-4xl md:text-5xl mb-6">{title}</h2>
@@ -308,19 +327,21 @@ const Protocol = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const cards = gsap.utils.toArray('.protocol-card');
+      const isMobile = window.innerWidth < 768;
+
       cards.forEach((card, i) => {
         if (i === cards.length - 1) return;
         ScrollTrigger.create({
           trigger: card,
-          start: 'top 10%',
+          start: isMobile ? 'top 12%' : 'top 10%',
           endTrigger: containerRef.current,
           end: 'bottom 20%',
           pin: true,
           pinSpacing: false,
           animation: gsap.to(card, {
-            scale: 0.9,
-            opacity: 0.5,
-            filter: 'blur(10px)',
+            scale: isMobile ? 0.96 : 0.9,
+            opacity: isMobile ? 0.8 : 0.5,
+            filter: `blur(${isMobile ? '4px' : '10px'})`,
             ease: 'none'
           }),
           scrub: true
@@ -532,7 +553,7 @@ const GetStarted = ({ setView }) => {
           >
             <div className="magnetic-btn-bg"></div>
             <span className="magnetic-btn-content flex items-center justify-center gap-3">
-              Fazer Pedido de Cotação <ArrowRight />
+              Pedir cotação <ArrowRight />
             </span>
           </button>
         </div>
