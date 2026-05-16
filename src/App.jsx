@@ -627,33 +627,67 @@ const App = () => {
     return localStorage.getItem('union_currentCategory') || 'Todos';
   });
 
-  // Track home scroll position to restore it later
-  const [homeScrollPos, setHomeScrollPos] = useState(0);
-  const [selectedBlogPost, setSelectedBlogPost] = useState(null);
-
-  // Persistence effect
+  // Handle browser history for back button support
   useEffect(() => {
-    localStorage.setItem('union_currentView', currentView);
-    localStorage.setItem('union_currentCategory', currentCategory);
-  }, [currentView, currentCategory]);
+    const handlePopState = (event) => {
+      if (event.state) {
+        const { view, category, blogPost } = event.state;
+        setCurrentView(view || 'home');
+        setCurrentCategory(category || 'Todos');
+        setSelectedBlogPost(blogPost || null);
+        
+        // Handle scroll position restoration if going back to home
+        if (view === 'home') {
+          setTimeout(() => {
+            window.scrollTo({ top: homeScrollPos, behavior: 'instant' });
+          }, 0);
+        } else {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+      } else {
+        // Fallback to home if no state
+        setCurrentView('home');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    
+    // Initial state setup if user refreshes on a subview
+    if (window.history.state === null) {
+      window.history.replaceState({ 
+        view: currentView, 
+        category: currentCategory, 
+        blogPost: selectedBlogPost 
+      }, '');
+    }
+
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [homeScrollPos, currentView, currentCategory, selectedBlogPost]);
 
   // Handle view changes and scroll restoration
   const handleSetView = (newView, blogPost = null, forceTop = false) => {
+    if (currentView === newView && !forceTop) return;
+
     if (currentView === 'home' && newView !== 'home') {
-      // Saving current scroll before leaving home
       setHomeScrollPos(window.scrollY);
     }
     
+    // Push new state to browser history
+    window.history.pushState({ 
+      view: newView, 
+      category: newView === 'catalogo' ? currentCategory : 'Todos', 
+      blogPost 
+    }, '', newView === 'home' ? '/' : `?view=${newView}`);
+
     setSelectedBlogPost(blogPost);
     setCurrentView(newView);
 
-    // If going TO home, restore scroll after a brief delay for render
     if (newView === 'home') {
       setTimeout(() => {
         window.scrollTo({ top: forceTop ? 0 : homeScrollPos, behavior: forceTop ? 'instant' : 'instant' });
       }, 0);
     } else {
-      // If going to other views (catalog, blog, cotacao), go to top
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
   };
