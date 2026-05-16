@@ -141,13 +141,15 @@ const Hero = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent"></div>
         </div>
         
-        <div className="hero-fade relative z-10 w-full max-w-6xl px-8 pb-20 md:pb-32 md:px-24 text-background text-left">
-          <h1 className="hero-text font-drama text-5xl md:text-7xl lg:text-[8rem] text-background/95 leading-[0.9] mb-4 drop-shadow-2xl">
-            Union <br className="md:hidden" /> International <br /> Trading
+        <div className="hero-fade relative z-10 w-full px-6 pb-12 md:pb-24 md:px-20 lg:px-32 text-background text-left">
+          <h1 className="hero-text font-drama text-[13vw] md:text-[10vw] lg:text-[9rem] text-background/95 leading-[0.85] mb-6 drop-shadow-2xl">
+            Union <br /> International <br /> Trading
           </h1>
-          <p className="hero-text text-sm md:text-2xl font-mono opacity-80 drop-shadow-lg tracking-[0.2em] uppercase max-w-md">
-            em cada movimento, <br className="md:hidden" /> confie na union
-          </p>
+          <div className="hero-text">
+            <p className="text-xs md:text-xl font-mono opacity-70 tracking-[0.3em] uppercase max-w-xs md:max-w-md border-l-2 border-primary pl-4 py-1">
+              em cada movimento, <br /> confie na union
+            </p>
+          </div>
         </div>
       </section>
     </div>
