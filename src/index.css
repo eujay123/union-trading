@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-dark font-sans antialiased overflow-x-hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold tracking-tight;
+  }
+  
+  .font-drama {
+    @apply font-serif italic font-normal;
+  }
+  
+  .font-data {
+    @apply font-mono;
+  }
+}
+
+@layer utilities {
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    display: none; /* Removido conforme solicitado para eliminar o efeito de 'pontos/asteriscos' */
+  }
+}
+
+.magnetic-btn {
+  @apply relative overflow-hidden transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)];
+}
+.magnetic-btn:hover {
+  transform: scale(1.03);
+}
+.magnetic-btn-bg {
+  @apply absolute inset-0 bg-dark transform translate-y-[101%] transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] z-0;
+}
+.magnetic-btn:hover .magnetic-btn-bg {
+  transform: translateY(0);
+}
+.magnetic-btn-content {
+  @apply relative z-10 transition-colors duration-500;
+}
+.magnetic-btn:hover .magnetic-btn-content {
+  @apply text-background;
+}
+
+.hover-lift {
+  @apply transition-transform duration-300;
+}
+.hover-lift:hover {
+  transform: translateY(-1px);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+/* Logo Styles */
+.nav-logo {
+  height: 28px;
+  width: auto;
+  transition: filter 0.5s ease;
+}
+
+@media (min-width: 768px) {
+  .nav-logo {
+    height: 34px;
+  }
+}
+
+nav:not(.nav-scrolled) .nav-logo {
+  filter: brightness(0) invert(1);
+}
