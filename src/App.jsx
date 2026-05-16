@@ -619,13 +619,21 @@ const Footer = ({ setView }) => {
 };
 
 const App = () => {
-  // Use localStorage to persist the view and category on refresh
+  // View state and persistence
   const [currentView, setCurrentView] = useState(() => {
     return localStorage.getItem('union_currentView') || 'home';
   });
   const [currentCategory, setCurrentCategory] = useState(() => {
     return localStorage.getItem('union_currentCategory') || 'Todos';
   });
+  const [homeScrollPos, setHomeScrollPos] = useState(0);
+  const [selectedBlogPost, setSelectedBlogPost] = useState(null);
+
+  // Persistence effect
+  useEffect(() => {
+    localStorage.setItem('union_currentView', currentView);
+    localStorage.setItem('union_currentCategory', currentCategory);
+  }, [currentView, currentCategory]);
 
   // Handle browser history for back button support
   useEffect(() => {
@@ -636,7 +644,6 @@ const App = () => {
         setCurrentCategory(category || 'Todos');
         setSelectedBlogPost(blogPost || null);
         
-        // Handle scroll position restoration if going back to home
         if (view === 'home') {
           setTimeout(() => {
             window.scrollTo({ top: homeScrollPos, behavior: 'instant' });
@@ -645,7 +652,6 @@ const App = () => {
           window.scrollTo({ top: 0, behavior: 'instant' });
         }
       } else {
-        // Fallback to home if no state
         setCurrentView('home');
         window.scrollTo({ top: 0, behavior: 'instant' });
       }
@@ -653,7 +659,6 @@ const App = () => {
 
     window.addEventListener('popstate', handlePopState);
     
-    // Initial state setup if user refreshes on a subview
     if (window.history.state === null) {
       window.history.replaceState({ 
         view: currentView, 
@@ -665,7 +670,6 @@ const App = () => {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [homeScrollPos, currentView, currentCategory, selectedBlogPost]);
 
-  // Handle view changes and scroll restoration
   const handleSetView = (newView, blogPost = null, forceTop = false) => {
     if (currentView === newView && !forceTop) return;
 
@@ -673,7 +677,6 @@ const App = () => {
       setHomeScrollPos(window.scrollY);
     }
     
-    // Push new state to browser history
     window.history.pushState({ 
       view: newView, 
       category: newView === 'catalogo' ? currentCategory : 'Todos', 
