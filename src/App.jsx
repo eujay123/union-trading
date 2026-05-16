@@ -330,18 +330,19 @@ const Protocol = () => {
       const isMobile = window.innerWidth < 768;
 
       cards.forEach((card, i) => {
-        if (i === cards.length - 1) return;
+        const isLast = i === cards.length - 1;
+        
         ScrollTrigger.create({
           trigger: card,
           start: isMobile ? 'top 12%' : 'top 10%',
           endTrigger: containerRef.current,
-          end: 'bottom 20%',
+          end: isLast ? 'bottom bottom' : 'bottom 20%', // Ensure last card doesn't stick too long
           pin: true,
           pinSpacing: false,
           animation: gsap.to(card, {
             scale: isMobile ? 0.96 : 0.9,
-            opacity: isMobile ? 0.8 : 0.5,
-            filter: `blur(${isMobile ? '4px' : '10px'})`,
+            opacity: 0, // Fade out completely to avoid overlaying next sections
+            filter: `blur(${isMobile ? '10px' : '20px'})`,
             ease: 'none'
           }),
           scrub: true
@@ -440,7 +441,7 @@ const Clients = () => {
   ];
 
   return (
-    <section id="clients" className="py-12 md:py-16 px-6 md:px-12 lg:px-24 bg-background">
+    <section id="clients" className="py-12 md:py-16 px-6 md:px-12 lg:px-24 bg-background relative z-20">
       <div className="max-w-7xl mx-auto">
         <div className="mb-12 md:mb-20 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Nossos Clientes</h2>
@@ -458,7 +459,7 @@ const Clients = () => {
               <img 
                 src={client.logo} 
                 alt={client.name} 
-                className="h-10 md:h-14 w-auto object-contain grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                className="h-10 md:h-14 w-auto object-contain grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
               />
             </a>
           ))}
@@ -473,7 +474,7 @@ const LatestBlog = ({ setView }) => {
   const recentPosts = BLOG_POSTS.slice(0, 3);
 
   return (
-    <section className="py-20 md:py-32 px-6 md:px-12 lg:px-24 bg-background">
+    <section className="py-20 md:py-32 px-6 md:px-12 lg:px-24 bg-background relative z-20">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
