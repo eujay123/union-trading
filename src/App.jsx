@@ -33,7 +33,11 @@ const Navbar = ({ setView, setCategory }) => {
           setView('home', null, true);
         }}
       >
-        <img src="/logo.png" alt="UNION Logo" className="h-6 md:h-8 w-auto object-contain" />
+        <img 
+          src="/logo.png" 
+          alt="UNION Logo" 
+          className="h-6 md:h-8 w-auto object-contain transition-all duration-500 [nav.nav-scrolled_&]:brightness-100 [nav.nav-scrolled_&]:invert-0 brightness-0 invert" 
+        />
       </div>
       <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 lg:gap-10 text-sm font-medium whitespace-nowrap">
         <button className="hover-lift" onClick={() => { setView('home'); setTimeout(() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>Produtos</button>
