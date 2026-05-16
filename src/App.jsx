@@ -142,8 +142,8 @@ const Hero = () => {
         </div>
         
         <div className="hero-fade relative z-10 w-full max-w-6xl px-8 pb-20 md:pb-0 md:px-24 text-background text-left md:text-center">
-          <h1 className="hero-text font-drama text-5xl md:text-7xl lg:text-[8rem] text-background/95 leading-[0.9] mb-6 drop-shadow-2xl">
-            Union International <br /> Trading
+          <h1 className="hero-text font-drama text-4xl md:text-7xl lg:text-[8rem] text-background/95 leading-[0.9] mb-6 drop-shadow-2xl whitespace-pre-line md:whitespace-normal">
+            Union International {"\n"} Trading
           </h1>
           <p className="hero-text text-sm md:text-2xl font-mono opacity-80 drop-shadow-lg tracking-[0.2em] uppercase max-w-md md:max-w-none mx-auto">
             em cada movimento, <br className="md:hidden" /> confie na union
