@@ -128,7 +128,7 @@ const Hero = () => {
 
   return (
     <div className="hero-wrapper">
-      <section ref={containerRef} className="relative h-[100dvh] w-full flex items-end justify-start overflow-hidden rounded-b-[2rem] md:rounded-b-[4rem] bg-dark">
+      <section ref={containerRef} className="relative h-[100dvh] w-full flex items-end justify-start md:items-center md:justify-center overflow-hidden rounded-b-[2rem] md:rounded-b-[4rem] bg-dark">
         <div className="absolute inset-0 z-0">
           <video 
             ref={videoRef}
@@ -138,20 +138,15 @@ const Hero = () => {
             preload="auto"
             className="w-full h-full object-cover scale-[1.05] pointer-events-none"
           ></video>
-          <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent"></div>
         </div>
         
-        <div className="hero-fade relative z-10 w-full px-8 pb-16 md:pb-24 md:px-24 text-background text-left">
-          <div className="hero-text mb-2">
-            <span className="font-sans font-bold text-xl md:text-3xl lg:text-4xl opacity-90 uppercase tracking-[0.2em]">
-              Union International
-            </span>
-          </div>
-          <h1 className="hero-text font-drama text-[18vw] md:text-[12vw] lg:text-[10rem] text-background leading-[0.8] mb-8 drop-shadow-2xl">
-            Trading
+        <div className="hero-fade relative z-10 w-full max-w-6xl px-8 pb-20 md:pb-0 md:px-24 text-background text-left md:text-center">
+          <h1 className="hero-text font-drama text-5xl md:text-7xl lg:text-[8rem] text-background/95 leading-[0.9] mb-6 drop-shadow-2xl">
+            Union <br className="md:hidden" /> International <br /> Trading
           </h1>
-          <p className="hero-text text-xs md:text-xl font-mono opacity-60 tracking-[0.3em] uppercase max-w-xs md:max-w-md">
-            em cada movimento, <br /> confie na union
+          <p className="hero-text text-sm md:text-2xl font-mono opacity-80 drop-shadow-lg tracking-[0.2em] uppercase max-w-md md:max-w-none mx-auto">
+            em cada movimento, <br className="md:hidden" /> confie na union
           </p>
         </div>
       </section>
