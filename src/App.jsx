@@ -93,7 +93,7 @@ const Hero = () => {
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: isMobile ? '+=1800' : '+=3000', // Reduced scroll distance on mobile for better feel
+          end: isMobile ? '+=300' : '+=500', // Adjusted to finish in a single mouse scroll
           pin: true,
           scrub: 1, // Smooth the scrub slightly (1s lag) to avoid stutter on mobile
         }
@@ -156,9 +156,7 @@ const Hero = () => {
       </section>
     </div>
   );
-};
-
-const ProductCard = ({ title, description, setView, setCategory, category, icon: Icon, initialItems }) => {
+};const ProductCard = ({ title, description, setView, setCategory, category, icon: Icon, initialItems, isHovered, isAnyHovered, onMouseEnter, onMouseLeave }) => {
   const [items, setItems] = useState(initialItems);
 
   useEffect(() => {
@@ -174,7 +172,18 @@ const ProductCard = ({ title, description, setView, setCategory, category, icon:
   }, [initialItems]);
 
   return (
-    <div onClick={() => { setCategory(category); setView('catalogo'); }} className="block bg-background border border-dark/10 rounded-[2rem] p-8 shadow-sm flex flex-col h-auto min-h-[350px] md:min-h-[380px] hover:border-primary transition-colors hover:shadow-md cursor-pointer group">
+    <div 
+      onClick={() => { setCategory(category); setView('catalogo'); }} 
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={`block bg-background border p-8 flex flex-col h-auto min-h-[350px] md:min-h-[380px] cursor-pointer group transition-all duration-500 ease-out rounded-[2rem] ${
+        isHovered 
+          ? 'border-primary/40 shadow-2xl shadow-primary/10 scale-[1.04] -translate-y-2 z-10' 
+          : isAnyHovered 
+            ? 'border-dark/5 shadow-none blur-[2px] opacity-50 scale-[0.97]' 
+            : 'border-dark/10 shadow-sm'
+      }`}
+    >
       <div className="flex items-center gap-3 mb-6">
         <Icon className="text-primary group-hover:scale-110 transition-transform" />
         <h3 className="text-xl group-hover:text-primary transition-colors">{title}</h3>
@@ -206,6 +215,8 @@ const ProductCard = ({ title, description, setView, setCategory, category, icon:
 };
 
 const Features = ({ setView, setCategory }) => {
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
   return (
     <section id="features" className="py-20 md:py-32 px-6 md:px-12 lg:px-24 bg-background">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -220,6 +231,10 @@ const Features = ({ setView, setCategory }) => {
              "CHAOYANG 11.00R20-18PR [CR926] MIX - MISTO",
              "CHAOYANG 12.00R20-18PR [CB919] MINING - MINERACAO"
            ]}
+           isHovered={hoveredIndex === 0}
+           isAnyHovered={hoveredIndex !== null}
+           onMouseEnter={() => setHoveredIndex(0)}
+           onMouseLeave={() => setHoveredIndex(null)}
         />
         <ProductCard 
            title="Lubrificantes"
@@ -232,6 +247,10 @@ const Features = ({ setView, setCategory }) => {
              "UNION ENERGY MARULA SAE 20W-50 API SL/CF 24x1 L",
              "UNION ENERGY TRANSFORMER OIL 208L"
            ]}
+           isHovered={hoveredIndex === 1}
+           isAnyHovered={hoveredIndex !== null}
+           onMouseEnter={() => setHoveredIndex(1)}
+           onMouseLeave={() => setHoveredIndex(null)}
         />
         <ProductCard 
            title="Materiais para Obra"
@@ -244,6 +263,10 @@ const Features = ({ setView, setCategory }) => {
              "CIMENTO ESTRUTURAL CP-II Z-32 50KG",
              "AÇO CA-50 VERGALHÃO 10mm (BARRA 12M)"
            ]}
+           isHovered={hoveredIndex === 2}
+           isAnyHovered={hoveredIndex !== null}
+           onMouseEnter={() => setHoveredIndex(2)}
+           onMouseLeave={() => setHoveredIndex(null)}
         />
       </div>
     </section>
